@@ -1,5 +1,5 @@
 # Little Esty Shop
-/var/folders/cw/hqkdn4yx0bj7xzzkbwv_yj_40000gn/T/TemporaryItems/NSIRD_screencaptureui_OiJicO/Screen Shot 2022-04-09 at 1.34.11 AM.png
+![image](https://user-images.githubusercontent.com/92954894/172974719-370a3630-0b2a-4b79-98b0-c1a7e780c823.png)
 ## Background and Description
 
 "Little Esty Shop" is a group project that requires students to build a fictitious e-commerce platform where merchants and admins can manage inventory and fulfill customer invoices.
@@ -26,7 +26,7 @@ This project requires Ruby 2.7.4.
 * Clone your fork
 * From the command line, install gems and set up your DB:
     * `bundle`
-    * `rails db:create`
+    * `rails db:create,migrate`
 * Run the test suite with `bundle exec rspec`.
 * Run your development server with `rails s` to see the app in action.
 

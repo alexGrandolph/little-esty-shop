@@ -8,6 +8,7 @@ Rails.application.routes.draw do
     resources :invoices, only: [:index, :show] 
     # resources :invoice_items, only: [:index, :show, :update]
     resources :dashboard, only: [:index]
+    resources :discounts
   end
 
   resources :admin, controller: 'admin/dashboard', only: [:index]

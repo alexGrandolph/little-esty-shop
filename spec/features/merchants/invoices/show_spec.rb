@@ -112,4 +112,35 @@ RSpec.describe 'Merchant Invoice Show Page' do
     end
 
   end
+
+  it "has a section for both total and discounted revenue" do
+    merch1 = Merchant.create!(name: "Carl's Castles", created_at: Time.now, updated_at: Time.now)
+
+    cust1 = Customer.create!(first_name: "Carl", last_name: "the Cat", created_at: Time.now, updated_at: Time.now)
+    item1 = Item.create!(name: "Big Castle", description: "Our biggest castle", unit_price: 100, merchant_id: merch1.id, created_at: Time.now, updated_at: Time.now)
+    item2 = Item.create!(name: "Medium Castle", description: "Our most medium castle", unit_price: 50, merchant_id: merch1.id, created_at: Time.now, updated_at: Time.now)
+    item3 = Item.create!(name: "Small Castle", description: "Our smallest castle", unit_price: 25, merchant_id: merch1.id, created_at: Time.now, updated_at: Time.now)
+
+    invoice1 = Invoice.create!(customer_id: cust1.id, created_at: Time.now, updated_at: Time.now)
+    invoice_item_1 = InvoiceItem.create!(item_id: item1.id, unit_price: item1.unit_price, quantity: 3, invoice_id: invoice1.id, created_at: Time.now, updated_at: Time.now)
+    invoice_item_2 = InvoiceItem.create!(item_id: item2.id, unit_price: item2.unit_price, quantity: 3, invoice_id: invoice1.id, created_at: Time.now, updated_at: Time.now)
+    invoice_item_3 = InvoiceItem.create!(item_id: item3.id, unit_price: item3.unit_price, quantity: 3, invoice_id: invoice1.id, created_at: Time.now, updated_at: Time.now)
+
+    discount_1 = merch1.discounts.create!(percent: 10, threshold: 3)
+  
+    visit "/merchants/#{merch1.id}/invoices/#{invoice1.id}"
+    expect(page).to have_content("Total Revenue From This Invoice:")
+    within "#total_revenue" do
+      expect(page).to have_content("Revenue: $5.25")
+    end
+    
+    expect(page).to have_content("Discounted Revenue From This Invoice:")
+    within "#discounted_revenue" do
+      expect(page).to have_content("Revenue: $0.53")
+    end
+  end
 end
+# As a merchant
+# When I visit my merchant invoice show page
+# Then I see the total revenue for my merchant from this invoice (not including discounts)
+# And I see the total discounted revenue for my merchant from this invoice which includes bulk discounts in the calculation

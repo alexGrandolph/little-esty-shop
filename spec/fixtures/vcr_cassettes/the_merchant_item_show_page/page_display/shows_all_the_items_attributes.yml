@@ -2,7 +2,7 @@
 http_interactions:
 - request:
     method: get
-    uri: https://api.github.com/repos/alexGrandolph/little-esty-shop
+    uri: https://api.github.com/repos/aspeth/bulk-discounts
     body:
       encoding: US-ASCII
       string: ''
@@ -19,7 +19,7 @@ http_interactions:
       message: rate limit exceeded
     headers:
       Date:
-      - Wed, 20 Apr 2022 20:31:50 GMT
+      - Thu, 21 Apr 2022 22:25:47 GMT
       Server:
       - Varnish
       Strict-Transport-Security:
@@ -50,7 +50,7 @@ http_interactions:
       X-Ratelimit-Remaining:
       - '0'
       X-Ratelimit-Reset:
-      - '1650487720'
+      - '1650583469'
       X-Ratelimit-Resource:
       - core
       X-Ratelimit-Used:
@@ -58,7 +58,7 @@ http_interactions:
       Content-Length:
       - '279'
       X-Github-Request-Id:
-      - F2B9:7756:38E757:71BA4A:62606DB6
+      - C54F:3B12:3CECB3:A5281F:6261D9EB
     body:
       encoding: UTF-8
       string: '{"message":"API rate limit exceeded for 97.118.217.16. (But here''s
@@ -66,5 +66,5 @@ http_interactions:
         documentation for more details.)","documentation_url":"https://docs.github.com/rest/overview/resources-in-the-rest-api#rate-limiting"}
 
 '
-  recorded_at: Wed, 20 Apr 2022 20:31:50 GMT
+  recorded_at: Thu, 21 Apr 2022 22:25:47 GMT
 recorded_with: VCR 6.1.0

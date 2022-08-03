@@ -2,7 +2,7 @@
 http_interactions:
 - request:
     method: get
-    uri: https://api.github.com/repos/alexGrandolph/little-esty-shop
+    uri: https://api.github.com/repos/aspeth/bulk-discounts
     body:
       encoding: US-ASCII
       string: ''
@@ -19,7 +19,7 @@ http_interactions:
       message: rate limit exceeded
     headers:
       Date:
-      - Wed, 20 Apr 2022 20:31:57 GMT
+      - Thu, 21 Apr 2022 22:25:53 GMT
       Server:
       - Varnish
       Strict-Transport-Security:
@@ -50,7 +50,7 @@ http_interactions:
       X-Ratelimit-Remaining:
       - '0'
       X-Ratelimit-Reset:
-      - '1650487721'
+      - '1650583468'
       X-Ratelimit-Resource:
       - core
       X-Ratelimit-Used:
@@ -58,7 +58,7 @@ http_interactions:
       Content-Length:
       - '279'
       X-Github-Request-Id:
-      - F2D4:1643:3D5AD9:772879:62606DBD
+      - C56A:1408:72F216:101BD2C:6261D9F1
     body:
       encoding: UTF-8
       string: '{"message":"API rate limit exceeded for 97.118.217.16. (But here''s
@@ -66,10 +66,10 @@ http_interactions:
         documentation for more details.)","documentation_url":"https://docs.github.com/rest/overview/resources-in-the-rest-api#rate-limiting"}
 
 '
-  recorded_at: Wed, 20 Apr 2022 20:31:57 GMT
+  recorded_at: Thu, 21 Apr 2022 22:25:53 GMT
 - request:
     method: get
-    uri: https://api.github.com/repos/alexGrandolph/little-esty-shop
+    uri: https://api.github.com/repos/aspeth/bulk-discounts
     body:
       encoding: US-ASCII
       string: ''
@@ -86,7 +86,7 @@ http_interactions:
       message: rate limit exceeded
     headers:
       Date:
-      - Wed, 20 Apr 2022 20:31:57 GMT
+      - Thu, 21 Apr 2022 22:25:54 GMT
       Server:
       - Varnish
       Strict-Transport-Security:
@@ -117,7 +117,7 @@ http_interactions:
       X-Ratelimit-Remaining:
       - '0'
       X-Ratelimit-Reset:
-      - '1650487720'
+      - '1650583469'
       X-Ratelimit-Resource:
       - core
       X-Ratelimit-Used:
@@ -125,7 +125,7 @@ http_interactions:
       Content-Length:
       - '279'
       X-Github-Request-Id:
-      - F2D5:4AAA:241F78:4F9199:62606DBD
+      - C56B:6CC4:8C9C35:1287A51:6261D9F1
     body:
       encoding: UTF-8
       string: '{"message":"API rate limit exceeded for 97.118.217.16. (But here''s
@@ -133,5 +133,5 @@ http_interactions:
         documentation for more details.)","documentation_url":"https://docs.github.com/rest/overview/resources-in-the-rest-api#rate-limiting"}
 
 '
-  recorded_at: Wed, 20 Apr 2022 20:31:57 GMT
+  recorded_at: Thu, 21 Apr 2022 22:25:54 GMT
 recorded_with: VCR 6.1.0

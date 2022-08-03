@@ -1,5 +1,6 @@
 class Merchant < ApplicationRecord
   has_many :items, dependent: :destroy
+  has_many :discounts
   has_many :invoice_items, through: :items, dependent: :destroy
   has_many :invoices, through: :invoice_items, dependent: :destroy
   has_many :customers, through: :invoices, dependent: :destroy
@@ -85,7 +86,4 @@ class Merchant < ApplicationRecord
     .order(total_revenue: :desc, created_at: :desc)
     .first.created_at.to_datetime
   end
-
-  
-
 end

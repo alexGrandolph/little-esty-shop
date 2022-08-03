@@ -129,12 +129,10 @@ RSpec.describe 'Merchant Dashboard Page' do
       expect(item_1.name).to appear_before(item_3.name)
       expect(item_3.name).to appear_before(item_2.name)
     end
-    #     As a merchant
-    # When I visit my merchant dashboard
-# In the section for "Items Ready to Ship",
-# Next to each Item name I see the date that the invoice was created
-# And I see the date formatted like "Monday, July 18, 2019"
-# And I see that the list is ordered from oldest to newest
-  end
 
+    it "has a link to view all discounts that goes to discounts#index" do
+      click_link "My Discounts"
+      expect(current_path).to eq("/merchants/#{@merch1.id}/discounts")
+    end
+  end
 end

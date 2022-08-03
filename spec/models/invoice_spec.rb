@@ -129,10 +129,106 @@ RSpec.describe Invoice, type: :model do
 
         invoice2 = FactoryBot.create(:invoice, customer_id: cust1.id)
         invoice_item_5 = FactoryBot.create(:invoice_item, item_id: item2.id, invoice_id: invoice2.id, unit_price: item2.unit_price, quantity: 10)
-# require "pry"; binding.pry
+
         expect(Invoice.revenue_for_invoice(invoice2.id)).to eq(100.00)
         expect(Invoice.revenue_for_invoice(invoice1.id)).to eq(40.00)
       end
     end
 
+  describe "#discounted_revenue" do
+    it "applies only to items that meet the threshold" do
+      merch1 = Merchant.create!(name: "Carl's Castles", created_at: Time.now, updated_at: Time.now)
+  
+      cust1 = Customer.create!(first_name: "Carl", last_name: "the Cat", created_at: Time.now, updated_at: Time.now)
+      item1 = Item.create!(name: "Big Castle", description: "Our biggest castle", unit_price: 100, merchant_id: merch1.id, created_at: Time.now, updated_at: Time.now)
+      item2 = Item.create!(name: "Medium Castle", description: "Our most medium castle", unit_price: 50, merchant_id: merch1.id, created_at: Time.now, updated_at: Time.now)
+      item3 = Item.create!(name: "Small Castle", description: "Our smallest castle", unit_price: 25, merchant_id: merch1.id, created_at: Time.now, updated_at: Time.now)
+  
+      invoice1 = Invoice.create!(customer_id: cust1.id, created_at: Time.now, updated_at: Time.now)
+      invoice_item_1 = InvoiceItem.create!(item_id: item1.id, unit_price: item1.unit_price, quantity: 3, invoice_id: invoice1.id, created_at: Time.now, updated_at: Time.now)
+      invoice_item_2 = InvoiceItem.create!(item_id: item2.id, unit_price: item2.unit_price, quantity: 3, invoice_id: invoice1.id, created_at: Time.now, updated_at: Time.now)
+      invoice_item_3 = InvoiceItem.create!(item_id: item3.id, unit_price: item3.unit_price, quantity: 2, invoice_id: invoice1.id, created_at: Time.now, updated_at: Time.now)
+  
+      discount_1 = merch1.discounts.create!(percent: 10, threshold: 3)
+    
+      expect(invoice1.discounted_revenue_for_merchant(merch1)).to eq(45)
+    end
+
+    it "applies the highest discount available" do
+      merch1 = Merchant.create!(name: "Carl's Castles", created_at: Time.now, updated_at: Time.now)
+  
+      cust1 = Customer.create!(first_name: "Carl", last_name: "the Cat", created_at: Time.now, updated_at: Time.now)
+      item1 = Item.create!(name: "Big Castle", description: "Our biggest castle", unit_price: 100, merchant_id: merch1.id, created_at: Time.now, updated_at: Time.now)
+      item2 = Item.create!(name: "Medium Castle", description: "Our most medium castle", unit_price: 100, merchant_id: merch1.id, created_at: Time.now, updated_at: Time.now)
+      item3 = Item.create!(name: "Small Castle", description: "Our smallest castle", unit_price: 100, merchant_id: merch1.id, created_at: Time.now, updated_at: Time.now)
+  
+      invoice1 = Invoice.create!(customer_id: cust1.id, created_at: Time.now, updated_at: Time.now)
+      invoice_item_1 = InvoiceItem.create!(item_id: item1.id, unit_price: item1.unit_price, quantity: 3, invoice_id: invoice1.id, created_at: Time.now, updated_at: Time.now)
+      invoice_item_2 = InvoiceItem.create!(item_id: item2.id, unit_price: item2.unit_price, quantity: 3, invoice_id: invoice1.id, created_at: Time.now, updated_at: Time.now)
+      invoice_item_3 = InvoiceItem.create!(item_id: item3.id, unit_price: item3.unit_price, quantity: 2, invoice_id: invoice1.id, created_at: Time.now, updated_at: Time.now)
+  
+      discount_1 = merch1.discounts.create!(percent: 10, threshold: 3)
+      discount_2 = merch1.discounts.create!(percent: 5, threshold: 2)
+    
+      expect(invoice1.discounted_revenue_for_merchant(merch1)).to eq(70)
+    end
+
+    it "applies the highest discount available" do
+      merch1 = Merchant.create!(name: "Carl's Castles", created_at: Time.now, updated_at: Time.now)
+  
+      cust1 = Customer.create!(first_name: "Carl", last_name: "the Cat", created_at: Time.now, updated_at: Time.now)
+      item1 = Item.create!(name: "Big Castle", description: "Our biggest castle", unit_price: 100, merchant_id: merch1.id, created_at: Time.now, updated_at: Time.now)
+      item2 = Item.create!(name: "Medium Castle", description: "Our most medium castle", unit_price: 100, merchant_id: merch1.id, created_at: Time.now, updated_at: Time.now)
+  
+      invoice1 = Invoice.create!(customer_id: cust1.id, created_at: Time.now, updated_at: Time.now)
+      invoice_item_1 = InvoiceItem.create!(item_id: item1.id, unit_price: item1.unit_price, quantity: 3, invoice_id: invoice1.id, created_at: Time.now, updated_at: Time.now)
+      invoice_item_2 = InvoiceItem.create!(item_id: item2.id, unit_price: item2.unit_price, quantity: 3, invoice_id: invoice1.id, created_at: Time.now, updated_at: Time.now)
+  
+      discount_1 = merch1.discounts.create!(percent: 10, threshold: 3)
+      discount_2 = merch1.discounts.create!(percent: 5, threshold: 2)
+    
+      expect(invoice1.discounted_revenue_for_merchant(merch1)).to eq(60)
+    end
+
+    it "applies only to items from my merchant" do
+      merch1 = Merchant.create!(name: "Carl's Castles", created_at: Time.now, updated_at: Time.now)
+      merch2 = Merchant.create!(name: "Soren's Shoes", created_at: Time.now, updated_at: Time.now)
+  
+      cust1 = Customer.create!(first_name: "Carl", last_name: "the Cat", created_at: Time.now, updated_at: Time.now)
+      item1 = Item.create!(name: "Big Castle", description: "Our biggest castle", unit_price: 100, merchant_id: merch1.id, created_at: Time.now, updated_at: Time.now)
+      item2 = Item.create!(name: "Medium Castle", description: "Our most medium castle", unit_price: 100, merchant_id: merch1.id, created_at: Time.now, updated_at: Time.now)
+      item3 = Item.create!(name: "Baby shoes", description: "Babies don't need shoes", unit_price: 100, merchant_id: merch2.id, created_at: Time.now, updated_at: Time.now)
+  
+      invoice1 = Invoice.create!(customer_id: cust1.id, created_at: Time.now, updated_at: Time.now)
+      invoice_item_1 = InvoiceItem.create!(item_id: item1.id, unit_price: item1.unit_price, quantity: 3, invoice_id: invoice1.id, created_at: Time.now, updated_at: Time.now)
+      invoice_item_2 = InvoiceItem.create!(item_id: item2.id, unit_price: item2.unit_price, quantity: 3, invoice_id: invoice1.id, created_at: Time.now, updated_at: Time.now)
+      invoice_item_3 = InvoiceItem.create!(item_id: item3.id, unit_price: item3.unit_price, quantity: 3, invoice_id: invoice1.id, created_at: Time.now, updated_at: Time.now)
+  
+      discount_1 = merch1.discounts.create!(percent: 10, threshold: 3)
+      discount_2 = merch2.discounts.create!(percent: 20, threshold: 3)
+    
+      expect(invoice1.discounted_revenue_for_merchant(merch1)).to eq(60)
+    end
+    
+    it "applies only to items from my merchant" do
+      merch1 = Merchant.create!(name: "Carl's Castles", created_at: Time.now, updated_at: Time.now)
+      merch2 = Merchant.create!(name: "Soren's Shoes", created_at: Time.now, updated_at: Time.now)
+  
+      cust1 = Customer.create!(first_name: "Carl", last_name: "the Cat", created_at: Time.now, updated_at: Time.now)
+      item1 = Item.create!(name: "Big Castle", description: "Our biggest castle", unit_price: 100, merchant_id: merch1.id, created_at: Time.now, updated_at: Time.now)
+      item2 = Item.create!(name: "Medium Castle", description: "Our most medium castle", unit_price: 100, merchant_id: merch1.id, created_at: Time.now, updated_at: Time.now)
+      item3 = Item.create!(name: "Baby shoes", description: "Babies don't need shoes", unit_price: 100, merchant_id: merch2.id, created_at: Time.now, updated_at: Time.now)
+  
+      invoice1 = Invoice.create!(customer_id: cust1.id, created_at: Time.now, updated_at: Time.now)
+      invoice_item_1 = InvoiceItem.create!(item_id: item1.id, unit_price: item1.unit_price, quantity: 3, invoice_id: invoice1.id, created_at: Time.now, updated_at: Time.now)
+      invoice_item_2 = InvoiceItem.create!(item_id: item2.id, unit_price: item2.unit_price, quantity: 3, invoice_id: invoice1.id, created_at: Time.now, updated_at: Time.now)
+      invoice_item_3 = InvoiceItem.create!(item_id: item3.id, unit_price: item3.unit_price, quantity: 3, invoice_id: invoice1.id, created_at: Time.now, updated_at: Time.now)
+  
+      discount_1 = merch1.discounts.create!(percent: 10, threshold: 3)
+      discount_2 = merch2.discounts.create!(percent: 20, threshold: 3)
+    
+      expect(invoice1.discounted_revenue_for_merchant(merch1)).to eq(60)
+    end
+    
+  end
 end

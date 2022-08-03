@@ -2,6 +2,7 @@ class Item < ApplicationRecord
   belongs_to :merchant
   has_many :invoice_items, dependent: :destroy
   has_many :invoices, through: :invoice_items, dependent: :destroy
+  has_many :discounts, through: :merchant
 
   enum status: { Disabled: 0, Enabled: 1 }
 
